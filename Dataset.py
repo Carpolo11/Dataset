@@ -166,7 +166,7 @@ print("\n" + "="*60)
 print("--- 3. Preprocesamiento de Datos ---")
 print("="*60)
 
-# Este es el punto 3 de la 1ra parte: Imputación de valores faltantes (con la media)
+#(con la media)
 
 # Verificar si hay valores faltantes en cada columna antes de la imputación
 print("\nValores faltantes por columna antes de la imputación:")
@@ -187,7 +187,7 @@ print(df.isnull().sum())
 
 print("\n--- Fin del Preprocesamiento de Datos ---")
 print("="*60)
-
+#hasta aqui cierra la media
 
 # --- 3. Preprocesamiento de Datos (Continuación): Codificación de Variables Categóricas ---
 print("\n" + "="*60)
