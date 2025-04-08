@@ -189,3 +189,25 @@ print("\n--- Fin del Preprocesamiento de Datos ---")
 print("="*60)
 
 
+# --- 3. Preprocesamiento de Datos (Continuación): Codificación de Variables Categóricas ---
+print("\n" + "="*60)
+print("--- 3. Preprocesamiento de Datos (Continuación): Codificación de Variables Categóricas ---")
+print("="*60)
+
+# Identificar las columnas categóricas a codificar
+categorical_cols = ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal']
+
+# Realizar One-Hot Encoding
+df = pd.get_dummies(df, columns=categorical_cols, prefix=categorical_cols)
+
+# Mostrar las primeras filas del DataFrame después del One-Hot Encoding
+print("\nPrimeras filas del DataFrame después del One-Hot Encoding:")
+print(df.head())
+
+# Mostrar la información del DataFrame para ver las nuevas columnas
+print("\nInformación del DataFrame después del One-Hot Encoding:")
+print(df.info())
+
+print("\n--- Fin de la Codificación de Variables Categóricas ---")
+print("="*60)
+
