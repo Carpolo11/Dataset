@@ -161,12 +161,15 @@ print("\n" + "="*60)
 print("--- Fin del Análisis Exploratorio de Datos (EDA) ---")
 print("="*60)
 
+
+# esta es la media
+
 # --- 3. Preprocesamiento de Datos ---
 print("\n" + "="*60)
 print("--- 3. Preprocesamiento de Datos ---")
 print("="*60)
 
-#(con la media)
+# Este es el punto 3 de la 1ra parte: Imputación de valores faltantes (con la media)
 
 # Verificar si hay valores faltantes en cada columna antes de la imputación
 print("\nValores faltantes por columna antes de la imputación:")
@@ -185,13 +188,74 @@ for column in df.select_dtypes(include=['number']).columns:
 print("\nValores faltantes por columna después de la imputación:")
 print(df.isnull().sum())
 
-print("\n--- Fin del Preprocesamiento de Datos ---")
+print("\n--- Fin de la media ---")
 print("="*60)
-#hasta aqui cierra la media
 
-# --- 3. Preprocesamiento de Datos (Continuación): Codificación de Variables Categóricas ---
+# esta es la mediana
+
+# --- 3. Preprocesamiento de Datos ---
 print("\n" + "="*60)
-print("--- 3. Preprocesamiento de Datos (Continuación): Codificación de Variables Categóricas ---")
+print("--- 3. Preprocesamiento de Datos ---")
+print("="*60)
+
+# Este es el punto 3 de la 1ra parte: Imputación de valores faltantes (con la mediana)
+
+# Verificar si hay valores faltantes en cada columna antes de la imputación
+print("\nValores faltantes por columna antes de la imputación:")
+print(df.isnull().sum())
+
+# Imputar valores faltantes en columnas numéricas con la mediana
+for column in df.select_dtypes(include=['number']).columns:
+    if df[column].isnull().any():
+        median_value = df[column].median()
+        df[column].fillna(median_value, inplace=True)
+        print(f"Valores faltantes en '{column}' imputados con la mediana ({median_value:.2f}).")
+    else:
+        print(f"La columna '{column}' no tiene valores faltantes.")
+
+# Verificar si quedan valores faltantes después de la imputación
+print("\nValores faltantes por columna después de la imputación:")
+print(df.isnull().sum())
+
+print("\n--- Fin de la mediana ---")
+print("="*60)
+
+#ESTA ES LA MODA
+
+# --- 3. Preprocesamiento de Datos ---
+print("\n" + "="*60)
+print("--- 3. Preprocesamiento de Datos ---")
+print("="*60)
+
+# Este es el punto 3 de la 1ra parte: Imputación de valores faltantes (con la moda)
+
+# Verificar si hay valores faltantes en cada columna antes de la imputación
+print("\nValores faltantes por columna antes de la imputación:")
+print(df.isnull().sum())
+
+# Imputar valores faltantes en todas las columnas con la moda
+for column in df.columns:
+    if df[column].isnull().any():
+        try:
+            mode_value = df[column].mode()[0]  # mode() puede devolver múltiples valores, tomamos el primero
+            df[column].fillna(mode_value, inplace=True)
+            print(f"Valores faltantes en '{column}' imputados con la moda ('{mode_value}').")
+        except Exception as e:
+            print(f"Error al imputar la columna '{column}' con la moda: {e}")
+    else:
+        print(f"La columna '{column}' no tiene valores faltantes.")
+
+# Verificar si quedan valores faltantes después de la imputación
+print("\nValores faltantes por columna después de la imputación:")
+print(df.isnull().sum())
+
+print("\n--- Fin de la moda ---")
+print("="*60)
+
+
+# --- 3. Preprocesamiento de Datos: Codificación de Variables Categóricas ---
+print("\n" + "="*60)
+print("--- 3. Preprocesamiento de Datos: Codificación de Variables Categóricas ---")
 print("="*60)
 
 # Identificar las columnas categóricas a codificar
@@ -211,3 +275,34 @@ print(df.info())
 print("\n--- Fin de la Codificación de Variables Categóricas ---")
 print("="*60)
 
+# Guarda el DataFrame completo en un archivo CSV
+df.to_csv('dataset_completo.csv', index=False)
+print("El dataset completo se ha guardado como 'dataset_completo.csv'.")
+
+# --- 3. Preprocesamiento de Datos (Continuación): Escalado de Características Numéricas ---
+print("\n" + "="*60)
+print("--- 3. Preprocesamiento de Datos (Continuación): Escalado de Características Numéricas ---")
+print("="*60)
+
+from sklearn.preprocessing import StandardScaler
+
+# Identificar las columnas numéricas a escalar
+# Excluimos la columna 'target' y las columnas que fueron codificadas con One-Hot Encoding
+numerical_cols = [col for col in df.columns if df[col].dtype in ['int64', 'float64'] and col not in ['target'] and not col.startswith(tuple(categorical_cols))]
+
+# Inicializar el StandardScaler
+scaler = StandardScaler()
+
+# Ajustar el escalador a las columnas numéricas y transformarlas
+df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+
+# Mostrar las primeras filas del DataFrame después del escalado
+print("\nPrimeras filas del DataFrame después del escalado:")
+print(df.head())
+
+# Mostrar estadísticas descriptivas después del escalado (para ver la media y desviación estándar aproximadas)
+print("\nEstadísticas descriptivas de las columnas numéricas después del escalado:")
+print(df[numerical_cols].describe())
+
+print("\n--- Fin del Escalado de Características Numéricas ---")
+print("="*60)
