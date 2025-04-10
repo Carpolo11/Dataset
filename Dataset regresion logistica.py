@@ -306,3 +306,51 @@ print(df[numerical_cols].describe())
 
 print("\n--- Fin del Escalado de Características Numéricas ---")
 print("="*60)
+
+# --- 4. ENTRENAMIENTO DEL MODELO DE REGRESION LOGISTICA ---
+print("\n" + "="*60)
+print("--- 4. Entrenamiento del Modelo de Regresión Logística ---")
+print("="*60)
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# 1. Separar las características (X) de la variable objetivo (y)
+X = df.drop('target', axis=1)
+y = df['target']
+
+# 2. Dividir los datos en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42) # 70% entrenamiento, 30% prueba
+
+# 3. Inicializar el modelo de Regresión Logística
+model = LogisticRegression(solver='liblinear', random_state=42) # 'liblinear' es un buen solver para datasets pequeños
+
+# 4. Entrenar el modelo
+model.fit(X_train, y_train)
+
+# 5. Realizar predicciones en el conjunto de prueba
+y_pred = model.predict(X_test)
+
+# 6. Evaluar el modelo
+print("\n--- Evaluación del Modelo ---")
+
+# Precisión (Accuracy)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Precisión del modelo: {accuracy:.2f}")
+
+# Reporte de clasificación (Precisión, Recall, F1-score, Support)
+print("\nReporte de Clasificación:")
+print(classification_report(y_test, y_pred))
+
+# Matriz de confusión
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.xlabel('Predicciones')
+plt.ylabel('Valores Reales')
+plt.title('Matriz de Confusión')
+plt.show()
+
+print("\n--- Fin del Entrenamiento del Modelo ---")
+print("="*60)
